@@ -2,7 +2,6 @@
 import Data.List
 import Data.Ord
 -- }}}
-
 -- Data types {{{
 data Point = Point {
     pointXval :: Double,
@@ -15,7 +14,6 @@ data Direction = StraightDir
                | RightDir
                deriving (Show, Eq)
 -- }}}
-
 -- Direction related methods {{{
 pointSubtract :: Point -> Point -> Point
 pointSubtract (Point p2x p2y _) (Point p1x p1y _) = Point (p2x - p1x) (p2y - p1y) "pointsToVector"
@@ -34,14 +32,13 @@ pointsToDirections :: [Point] -> [Direction]
 pointsToDirections [a,b,c] = [threePointDirection a b c]
 pointsToDirections (a:b:c:xs) = [threePointDirection a b c] ++ pointsToDirections (b:c:xs)
 -- }}}
-
 -- Sorting {{{
 sortByLowestYval :: [Point] -> [Point]
 sortByLowestYval inList = sortBy compareLowestYval inList where
     compareLowestYval a b
         | pointYval a >  pointYval b = GT
         | pointYval a <  pointYval b = LT
-        | pointYval a == pointYval b = compare (pointXval a) (pointXval b) 
+        | pointYval a == pointYval b = compare (pointXval a) (pointXval b)
 
 sortByCoTan :: [Point] -> [Point]
 sortByCoTan inList = pivotPoint : sortBy compareCoTan remainingPoints where
@@ -65,10 +62,9 @@ sortByCoTan inList = pivotPoint : sortBy compareCoTan remainingPoints where
             b_CoTan = (bX - pivotX) / (bY - pivotY)
             -- TODO: use a calcCoTan method instead of two variables
 -- }}}
-
 -- Scan algorithm {{{
-grahamScan :: [Point] -> [Point]                      
-grahamScan [a,b,c] = [a,b,c]                        
+grahamScan :: [Point] -> [Point]
+grahamScan [a,b,c] = [a,b,c]
 grahamScan inList = checkTurns toScan [initialPoint] where
     initialPoint = head sortedList
     sortedList   = sortByCoTan inList
@@ -79,7 +75,6 @@ grahamScan inList = checkTurns toScan [initialPoint] where
         | otherwise                                = checkTurns (b:c:xs) (output ++ [a])
     checkTurns _ output = output
 -- }}}
-
 -- Debugging {{{
 namePointRepresentation :: [Point] -> String
 namePointRepresentation inList = concat $ intersperse " - " (pointNames inList) where
